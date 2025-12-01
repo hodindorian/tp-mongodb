@@ -1,20 +1,26 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Modification d'un livre{% endblock %}
+
 {% block content %}
 <p>&larr;&nbsp;<a href="/index.php">Retourner à la liste</a></p>
+
+{% if message %}
+    <div style="color: red; font-weight: bold;">{{ message }}</div>
+{% endif %}
+
 <form action="/update.php" method="post">
-        <input type="hidden" id="id" name="id" value="{{ entity._id }}">
+    <input type="hidden" id="id" name="id" value="{{ entity._id }}">
 
-        <label for="title">Titre :</label>
-        <input type="text" id="title" name="title" value="récupérez la valeur depuis mongodb" size="100">
+    <label for="title">Titre :</label>
+    <input type="text" id="title" name="title" value="{{ entity.titre }}" size="100">
 
-        <label for="author">Auteur :</label>
-        <input type="text" id="author" name="author" size="50" value="récupérez la valeur depuis mongodb">
+    <label for="author">Auteur :</label>
+    <input type="text" id="author" name="author" value="{{ entity.auteur }}" size="50">
 
-        <label for="author">Siècle :</label>
-        <input type="number" id="century" name="century" value="123456879">
+    <label for="century">Siècle :</label>
+    <input type="number" id="century" name="century" value="{{ entity.siecle }}">
 
-        <button type="submit">Enregistrer</button>
+    <button type="submit">Enregistrer</button>
 </form>
 {% endblock %}

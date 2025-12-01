@@ -3,19 +3,26 @@
 {% block title %}Index{% endblock %}
 {% block content %}
 <h1>Liste des manuscrits de la bibliothèque du Patrimoine de Clermont Auvergne Métropole</h1>
+<a href="create.php?id=1">Créer</a>
 <table>
     <tr>
-        <th>Référence</th>
         <th>Titre</th>
         <th>Auteur</th>
+        <th>Siecle</th>
         <th>Actions</th>
     </tr>
     {% for document in list %}
     <tr>
-        <td>{{ document.name }}</td>
-        <td>{{ document.name }}</td>
-        <td>{{ document.name }}</td>
-        <td><a href="get.php?id=1">voir</a>&nbsp;/&nbsp;<a href="edit.php?id=1">éditer</a>&nbsp;/&nbsp;<a href="delete.php?id=1">supprimer</a></td>
+        <td>{{ document.titre }}</td>
+        <td>{{ document.auteur }}</td>
+        <td>{{ document.siecle }}</td>
+        <td>
+            <a href="get.php?id={{ document._id }}">voir</a>
+            &nbsp;/&nbsp;
+            <a href="update.php?id={{ document._id }}">éditer</a>
+            &nbsp;/&nbsp;
+            <a href="delete.php?id={{ document._id }}" onclick="return confirm('Supprimer ce livre ?');">supprimer</a>
+        </td>
     </tr>
     {% endfor %}
 </table>

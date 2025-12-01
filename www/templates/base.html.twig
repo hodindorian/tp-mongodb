@@ -9,7 +9,18 @@
 <body>
 <div class="header"><img class="logo" src="/assets/media/logo_mongo.svg"></div>
 <div class="background"></div>
-<div id="content" class="content">{% block content %}{% endblock %}</div>
+<div id="content" class="content">
+    {% block content %}{% endblock %}
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="?page={{ page - 1 }}"><-</a>
+        {% endif %}
+        <span>Page {{ page }} / {{ totalPages }}</span>
+        {% if page < totalPages %}
+            <a href="?page={{ page + 1 }}">-></a>
+        {% endif %}
+    </div>
+</div>
 <div id="footer">
     {% block footer %}
     &copy; Copyright 2023 by <a href="http://domain.invalid/">you</a>.

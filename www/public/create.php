@@ -9,12 +9,23 @@ use Twig\Error\SyntaxError;
 $twig = getTwig();
 $manager = getMongoDbManager();
 
-// petite aide : https://github.com/VSG24/mongodb-php-examples
-
 if (!empty($_POST)) {
-    // @todo coder l'enregistrement d'un nouveau livre en lisant le contenu de $_POST
+    $title = isset($_POST['titre']) ? trim($_POST['titre']) : '';
+    $author = isset($_POST['auteur']) ? trim($_POST['auteur']) : '';
+    $siecle = isset($_POST['siecle']) ? trim($_POST['siecle']) : '';
+
+    if($title!='' || $author!='' || $siecle!=''){
+        $book = [
+            'titre' => $title,
+            'auteur' => $author,
+            'siecle' => $siecle,
+        ];
+        $manager->selectCollection('tp')->insertOne($book);
+        header('Location: /index.php');
+        exit;
+
+    }
 } else {
-// render template
     try {
         echo $twig->render('create.html.twig');
     } catch (LoaderError|RuntimeError|SyntaxError $e) {
