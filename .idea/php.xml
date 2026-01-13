@@ -25,6 +25,21 @@
       <path value="$PROJECT_DIR$/www/vendor/phpoption/phpoption" />
       <path value="$PROJECT_DIR$/www/vendor/psr/http-message" />
       <path value="$PROJECT_DIR$/www/vendor/predis/predis" />
+      <path value="$PROJECT_DIR$/www/vendor/open-telemetry/api" />
+      <path value="$PROJECT_DIR$/www/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/www/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/www/vendor/php-http/httplug" />
+      <path value="$PROJECT_DIR$/www/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/www/vendor/php-http/promise" />
+      <path value="$PROJECT_DIR$/www/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-php85" />
+      <path value="$PROJECT_DIR$/www/vendor/elastic/transport" />
+      <path value="$PROJECT_DIR$/www/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/www/vendor/elasticsearch/elasticsearch" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/www/vendor/open-telemetry/context" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />

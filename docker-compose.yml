@@ -1,4 +1,3 @@
-version: "3.3"
 services:
     tpmongo-mongodb:
         container_name: "tpmongo-mongodb"

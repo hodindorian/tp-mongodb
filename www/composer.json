@@ -1,14 +1,15 @@
 {
-    "require": {
-        "mongodb/mongodb": "^1.20",
-        "ext-mongodb": "*",
-        "twig/twig": "^3.5",
-        "vlucas/phpdotenv": "^5.5",
-        "predis/predis": "^3.2"
-    },
-    "config": {
-        "platform": {
-            "php": "8.3"
-        }
+  "require": {
+    "mongodb/mongodb": "^2.0",
+    "twig/twig": "^3.5",
+    "vlucas/phpdotenv": "^5.5",
+    "predis/predis": "^3.2",
+    "elasticsearch/elasticsearch": "^8.0",
+    "ext-mongodb": "*",
+  },
+  "config": {
+    "platform": {
+      "php": "8.3"
     }
+  }
 }

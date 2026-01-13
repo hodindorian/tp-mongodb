@@ -10,6 +10,8 @@ use MongoDB\Database;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Predis\Client as PredisClient;
+use Elastic\Elasticsearch\Client as ElasticClient;
+use Elastic\Elasticsearch\ClientBuilder;
 
 // env configuration
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
@@ -25,7 +27,6 @@ function getMongoDbManager(): Database
     $client = new MongoDB\Client("mongodb://{$_ENV['MDB_USER']}:{$_ENV['MDB_PASS']}@{$_ENV['MDB_SRV']}:{$_ENV['MDB_PORT']}");
     return $client->selectDatabase($_ENV['MDB_DB']);
 }
-
 
 function getRedisClient(): ? PredisClient
 {
@@ -53,3 +54,26 @@ function getRedisClient(): ? PredisClient
     }
 }
 
+function getElasticClient(): ? ElasticClient
+{
+    if (!isset($_ENV['ELASTIC_HOST'])) {
+        return null;
+    }
+
+    try {
+        $client = ClientBuilder::create()
+            ->setHosts([$_ENV['ELASTIC_HOST']])
+            ->build();
+
+        // test connexion
+        $response = $client->info();
+        if (!empty($response)) {
+            return $client;
+        }
+
+        throw new Exception("ElasticSearch non joignable.");
+    } catch (Exception $e) {
+        error_log("Erreur ElasticSearch : " . $e->getMessage());
+        return null;
+    }
+}

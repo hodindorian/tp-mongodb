@@ -2,18 +2,21 @@
 
 include_once '../init.php';
 
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-$twig = getTwig();
+$twig    = getTwig();
 $manager = getMongoDbManager();
-$redis = getRedisClient();
-
+$redis   = getRedisClient();
+$es      = getElasticClient();
+$q = $_GET['q'] ?? null;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $perPage = 15;
 
-$cacheKey = "books_page_" . $page;
+$cacheKey = 'books_page_' . $page . '_q_' . md5($q ?? '');
 
 if ($redis) {
     $cached = $redis->get($cacheKey);
@@ -26,35 +29,91 @@ if ($redis) {
             'totalPages' => $payload['totalPages'],
             'perPage'    => $perPage,
             'total'      => $payload['total'],
-            'cached'     => true
+            'q'          => $q,
+            'cached'     => true,
         ]);
         exit;
     }
 }
 
-$result = $manager->selectCollection($_ENV['MDB_DB'])->aggregate([
-    [
-        '$facet' => [
-            'data' => [
-                ['$sort' => ['_id' => -1]],
-                ['$skip' => ($page - 1) * $perPage],
-                ['$limit' => $perPage],
-            ],
-            'total' => [
-                ['$count' => 'count']
+$ids = null;
+
+if ($q && $es) {
+    try {
+        $response = $es->search([
+            'index' => $_ENV['ELASTIC_INDEX'],
+            'body'  => [
+                'query' => [
+                    'bool' => [
+                        'should' => [
+                            [
+                                'match' => [
+                                    'title' => [
+                                        'query'     => $q,
+                                        'fuzziness' => 'AUTO',
+                                        'boost'     => 2
+                                    ]
+                                ]
+                            ],
+                            [
+                                'match' => [
+                                    'author' => [
+                                        'query'     => $q,
+                                        'fuzziness' => 'AUTO',
+                                        'boost'     => 1
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
+        ]);
+
+        $ids = array_map(
+            fn ($hit) => new MongoDB\BSON\ObjectId($hit['_id']),
+            $response['hits']['hits']
+        );
+
+    } catch (ClientResponseException|ServerResponseException $e) {}
+}
+
+$pipeline = [];
+
+if ($ids !== null) {
+    $pipeline[] = [
+        '$match' => [
+            '_id' => ['$in' => $ids]
+        ]
+    ];
+}
+
+$pipeline[] = [
+    '$facet' => [
+        'data' => [
+            ['$sort' => ['_id' => -1]],
+            ['$skip' => ($page - 1) * $perPage],
+            ['$limit' => $perPage],
+        ],
+        'total' => [
+            ['$count' => 'count']
         ]
     ]
-])->toArray();
+];
 
-$list = $result[0]['data'] ?? [];
+$result = $manager
+    ->selectCollection($_ENV['MDB_DB'])
+    ->aggregate($pipeline)
+    ->toArray();
+
+$list  = $result[0]['data'] ?? [];
 $total = $result[0]['total'][0]['count'] ?? 0;
-$totalPages = ceil($total / $perPage);
+$totalPages = (int) ceil($total / $perPage);
 
 $redis?->setex($cacheKey, 20, json_encode([
-    'list' => $list,
-    'total' => $total,
-    'totalPages' => $totalPages
+    'list'       => $list,
+    'total'      => $total,
+    'totalPages' => $totalPages,
 ]));
 
 try {
@@ -64,7 +123,8 @@ try {
         'totalPages' => $totalPages,
         'perPage'    => $perPage,
         'total'      => $total,
-        'cached'     => false
+        'q'          => $q,
+        'cached'     => false,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

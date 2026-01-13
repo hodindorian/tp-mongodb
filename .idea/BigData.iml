@@ -16,6 +16,21 @@
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/predis/predis" />
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/elastic/transport" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/elasticsearch/elasticsearch" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/open-telemetry/api" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/open-telemetry/context" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/php-http/httplug" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/php-http/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/symfony/polyfill-php82" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/symfony/polyfill-php85" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
