@@ -65,7 +65,6 @@ function getElasticClient(): ? ElasticClient
             ->setHosts([$_ENV['ELASTIC_HOST']])
             ->build();
 
-        // test connexion
         $response = $client->info();
         if (!empty($response)) {
             return $client;
